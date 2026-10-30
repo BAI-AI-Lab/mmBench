@@ -1,0 +1,37 @@
+#!/bin/bash
+# mmBench command line (see README.md).
+#   mmb list                                         the sources: capability, tier, items, dataset
+#   mmb build [--sources a,b] [--seed 0] [--dry-run]  sample the items into $MMB_HOME/data (downloads only those)
+#   mmb run [--smoke] [--k 4] [--caps a,b] [--only id,...]
+#                                                    answer with $MODEL at $OPENAI_BASE_URL, then write the report
+#   mmb report <run dir> [<run dir> ...] --out <dir> [--prices m=in,hit,out;...] [--names m=name;...]
+#                                                    one report for several runs: capability profile and ranking
+#   mmb test                                         the test suite (synthetic items, a mock endpoint)
+# MMB_HOME (default: this checkout) holds data/ and runs/; MMB_PYTHON overrides the Python (default .venv/bin/python).
+set -euo pipefail
+ROOT=$(cd "$(dirname "$(readlink -f "$0")")/.." && pwd)
+export MMB_HOME=${MMB_HOME:-$ROOT}
+PY=${MMB_PYTHON:-$ROOT/.venv/bin/python}
+[ -x "$PY" ] || PY=python3
+
+case "${1:-}" in
+  list)   exec "$PY" "$ROOT/mmbench/mm_build.py" --list ;;
+  build)  exec "$PY" "$ROOT/mmbench/mm_build.py" "${@:2}" ;;
+  run)
+    : "${MODEL:?set MODEL}" "${OPENAI_BASE_URL:?set OPENAI_BASE_URL}" "${OPENAI_API_KEY:?set OPENAI_API_KEY}"
+    tag=full
+    for x in "${@:2}"; do [ "$x" = --smoke ] && tag=smoke; done
+    d=$MMB_HOME/runs/${MODEL//\//_}/mm-$tag
+    mkdir -p "$d"
+    echo "=== mmb run ($tag) model=$MODEL  $(date '+%F %T')"
+    rc=0
+    "$PY" "$ROOT/mmbench/mm_run.py" --out "$d" "${@:2}" || rc=$?   # 3 = out of balance, 4 = paused
+    [ $rc = 4 ] && { echo "=== PAUSED: run the same command again to continue"; exit 4; }
+    [ $rc = 0 ] || [ $rc = 3 ] || { echo "=== generation FAILED (exit $rc)" >&2; exit $rc; }
+    "$PY" "$ROOT/mmbench/mm_report.py" "$d" --out "$d/report" || echo "=== report FAILED" >&2
+    echo "=== done $(date +%T): $d/report/report.md"
+    exit $rc ;;
+  report) exec "$PY" "$ROOT/mmbench/mm_report.py" "${@:2}" ;;
+  test)   exec "$PY" "$ROOT/tests/test_mm.py" ;;
+  *)      sed -n 2,12p "$0" | sed 's/^# \{0,1\}//'; exit 1 ;;
+esac

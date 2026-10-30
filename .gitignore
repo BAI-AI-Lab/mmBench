@@ -1,0 +1,18 @@
+# secrets and machine-local settings never go in the repo
+*.env
+.env*
+*.pem
+id_rsa*
+id_ed25519*
+
+# items (images, frames, questions: several sources allow academic use only), runs, the environment
+data/
+runs/
+.venv/
+__pycache__/
+*.pyc
+*.log
+.ruff_cache/
+
+.DS_Store
+._*
