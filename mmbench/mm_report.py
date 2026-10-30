@@ -169,8 +169,14 @@ def summary(stats, p):
 
 
 def notes(stats, p):
-    k = sorted({s["info"].get("k") for s in stats})
-    out = [f"每道题每个模型答 {'/'.join(map(str, k))} 次，题目得分取各次的平均；只比较所有模型都答过的 {p['n']} 道题。"
+    planned = sorted({s["info"].get("k") for s in stats})
+    per = [s["samples"] / max(len(s["items"]), 1) for s in stats]  # answered so far, which a run in progress has fewer of
+    if len({round(x, 6) for x in per}) == 1 and per[0] == round(per[0]) and round(per[0]) in planned:
+        times = f"答 {round(per[0])} 次"
+    else:
+        times = (f"平均答 {' / '.join(f'{x:.1f}' for x in per)} 次（依次为 {' / '.join(s['model'] for s in stats)}；"
+                 f"计划 {'/'.join(map(str, planned))} 次，运行尚未完成）")
+    out = [f"每道题每个模型{times}，题目得分取各次的平均；只比较所有模型都答过的 {p['n']} 道题。"
            "题目抽自公开评测集，按来源的难度分为 L1–L4，分数不能和这些评测集的官方榜单直接比较。",
            "总分是各项能力的等权平均，不按题数加权。95% 区间来自 2000 次按题重抽样（bootstrap）；两两差值的区间在每项能力内"
            "成对重抽样。区间包含 0 的两个模型判为平手，名次相同。"]

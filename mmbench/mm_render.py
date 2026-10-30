@@ -165,7 +165,8 @@ PREAMBLE = r"""\documentclass[11pt,a4paper,fontset=none]{ctexart}
   \IfFontExistsTF{Kaiti SC}{\setCJKmainfont{Kaiti SC}\setCJKsansfont{Kaiti SC}\setCJKmonofont{Kaiti SC}}{%
   \IfFileExists{\WinFonts simkai.ttf}{\setCJKmainfont{simkai.ttf}[Path=\WinFonts, AutoFakeBold=2.5]\setCJKsansfont{simkai.ttf}[Path=\WinFonts, AutoFakeBold=2.5]%
     \setCJKmonofont{simkai.ttf}[Path=\WinFonts]}{%
-  \setCJKmainfont{FandolKai}\setCJKsansfont{FandolKai}\setCJKmonofont{FandolKai}}}}
+  \setCJKmainfont{FandolKai-Regular.otf}[AutoFakeBold=2.5]\setCJKsansfont{FandolKai-Regular.otf}[AutoFakeBold=2.5]%
+  \setCJKmonofont{FandolKai-Regular.otf}}}}% by file name: TeX Live's own fonts are not known to fontconfig on Linux
 \usepackage{amsmath}
 \usepackage{booktabs,tabularx,longtable,array,graphicx,float}
 \usepackage{enumitem}
