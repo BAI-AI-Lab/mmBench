@@ -27,6 +27,7 @@ case "${1:-}" in
     rc=0
     "$PY" "$ROOT/mmbench/mm_run.py" --out "$d" "${@:2}" || rc=$?   # 3 = out of balance, 4 = paused
     [ $rc = 4 ] && { echo "=== PAUSED: run the same command again to continue"; exit 4; }
+    [ $rc = 5 ] && { echo "=== another mmb run is already using $d: nothing asked"; exit 5; }
     [ $rc = 0 ] || [ $rc = 3 ] || { echo "=== generation FAILED (exit $rc)" >&2; exit $rc; }
     "$PY" "$ROOT/mmbench/mm_report.py" "$d" --out "$d/report" || echo "=== report FAILED" >&2
     echo "=== done $(date +%T): $d/report/report.md"

@@ -12,10 +12,12 @@ MM_MAX_SECONDS (a request longer than this is cut off and counts as a timeout), 
 
 It writes problems.json, run.json, usage.jsonl (one line per API call; images logged by file name
 only) and answers.jsonl (q = <item id>#<sample>, the reply). A re-run asks only what is missing; touch <run dir>/STOP
-to pause (exit 4); an account out of balance stops the run (exit 3).
+to pause (exit 4); an account out of balance stops the run (exit 3). One run per directory: a second one started on
+the same directory while the first is still going exits at once (exit 5), so no item is asked twice.
 """
 import argparse
 import concurrent.futures
+import fcntl
 import json
 import os
 import sys
@@ -64,6 +66,12 @@ def main():
             for k in range(1 if a.smoke else a.k):
                 jobs.append((iid, k))
     os.makedirs(a.out, exist_ok=True)
+    lock = open(os.path.join(a.out, ".lock"), "w")  # held until this process exits
+    try:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError:
+        print(f"another run is using {a.out}; nothing asked", file=sys.stderr)
+        sys.exit(5)
     usage_path = os.path.join(a.out, "usage.jsonl")
     items = {i: M.load_item(i) for i in {i for i, _ in jobs}}
     missing = [f"{i}/{f}" for i, it in sorted(items.items()) for f in (it.get("images") or []) + (it.get("frames") or [])
@@ -78,15 +86,13 @@ def main():
                "temperature": a.temperature, "max_tokens": a.max_tokens, "reasoning_effort": a.reasoning_effort,
                "detail": detail, "omit": a.omit, "started": time.time()},
               open(os.path.join(a.out, "run.json"), "w"), indent=1)
-    have = {}
-    if os.path.exists(usage_path):
-        for line in open(usage_path):
-            r = json.loads(line)
-            if r.get("content") and r["content"][0].strip() and (r.get("finish") or [None])[0] != "timeout":
-                have[r["q"]] = r
+    have = {}  # replies in the usage log, so an answer logged there but not in answers.jsonl is not asked again
+    for r in M.read_jsonl(usage_path):
+        if r.get("content") and r["content"][0].strip() and (r.get("finish") or [None])[0] != "timeout":
+            have[r["q"]] = r
     ans_path = os.path.join(a.out, "answers.jsonl")
     last = {}
-    for r in (map(json.loads, open(ans_path)) if os.path.exists(ans_path) else []):
+    for r in M.read_jsonl(ans_path):
         last[r["q"]] = r
     done = {q for q, r in last.items() if r.get("finish") != "error"}
 

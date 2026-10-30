@@ -36,6 +36,24 @@ def load_item(iid):
     return json.load(open(os.path.join(item_dir(iid), "item.json")))
 
 
+def read_jsonl(path):
+    """The records of a JSON-lines log; a line cut short (a crash or a full disk mid-write) is skipped with a warning,
+    never fatal, so a run can always resume from what it has."""
+    out, bad = [], 0
+    if os.path.exists(path):
+        for line in open(path, encoding="utf-8", errors="replace"):
+            if not line.strip():
+                continue
+            try:
+                out.append(json.loads(line))
+            except ValueError:
+                bad += 1
+    if bad:
+        import sys
+        print(f"warning: {bad} unreadable line(s) skipped in {path}", file=sys.stderr)
+    return out
+
+
 def load_manifest(path):
     """samples/mm.json -> {"capabilities": {cap: [item id, ...]}, ...}"""
     return json.load(open(path))

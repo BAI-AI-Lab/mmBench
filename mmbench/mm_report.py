@@ -32,7 +32,7 @@ TIE = 1e-9
 
 
 def jl(path):
-    return [json.loads(x) for x in open(path)] if os.path.exists(path) else []
+    return M.read_jsonl(path)
 
 
 def load(run_dir, prices=None, names=None):

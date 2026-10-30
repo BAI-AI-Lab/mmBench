@@ -190,6 +190,20 @@ def main():
         subprocess.run([sys.executable, os.path.join(ROOT, "mmbench", "mm_run.py"), "--out", run, "--manifest", man, "--k", "2"],
                        env=dict(env, MODEL="mock"), check=True)
         check(len(open(os.path.join(run, "usage.jsonl")).read().splitlines()) == before, "re-run asks nothing again")
+        open(os.path.join(run, "answers.jsonl"), "a").write('{"q": "cut short by a cra')  # a crash mid-write
+        r = subprocess.run([sys.executable, os.path.join(ROOT, "mmbench", "mm_run.py"), "--out", run, "--manifest", man, "--k", "2"],
+                           env=dict(env, MODEL="mock"), capture_output=True, text=True)
+        check(r.returncode == 0 and "unreadable line" in r.stderr
+              and len(open(os.path.join(run, "usage.jsonl")).read().splitlines()) == before,
+              "a line cut short in a log is skipped: the run resumes, nothing asked again")
+        import fcntl
+        held = open(os.path.join(run, ".lock"), "w")
+        fcntl.flock(held, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        r = subprocess.run([sys.executable, os.path.join(ROOT, "mmbench", "mm_run.py"), "--out", run, "--manifest", man, "--k", "3"],
+                           env=dict(env, MODEL="mock"), capture_output=True, text=True)
+        held.close()
+        check(r.returncode == 5 and len(open(os.path.join(run, "usage.jsonl")).read().splitlines()) == before,
+              "a second run on the same directory exits at once (exit 5), nothing asked twice")
         broken = item("unit/b/1", "reasoning", "L1", "unit", "Broken?", "mcq", "A", options=["x", "y"])
         os.remove(os.path.join(M.item_dir(broken["id"]), "img0.png"))
         bman = os.path.join(M.DATA, "broken.json")
