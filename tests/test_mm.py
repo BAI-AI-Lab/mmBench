@@ -190,6 +190,15 @@ def main():
         subprocess.run([sys.executable, os.path.join(ROOT, "mmbench", "mm_run.py"), "--out", run, "--manifest", man, "--k", "2"],
                        env=dict(env, MODEL="mock"), check=True)
         check(len(open(os.path.join(run, "usage.jsonl")).read().splitlines()) == before, "re-run asks nothing again")
+        broken = item("unit/b/1", "reasoning", "L1", "unit", "Broken?", "mcq", "A", options=["x", "y"])
+        os.remove(os.path.join(M.item_dir(broken["id"]), "img0.png"))
+        bman = os.path.join(M.DATA, "broken.json")
+        json.dump({"version": "test", "capabilities": {"reasoning": [broken["id"]]}}, open(bman, "w"))
+        bdir = os.path.join(HOME, "runs", "mock", "mm-broken")
+        r = subprocess.run([sys.executable, os.path.join(ROOT, "mmbench", "mm_run.py"), "--out", bdir, "--manifest", bman],
+                           env=dict(env, MODEL="mock"), capture_output=True, text=True)
+        check(r.returncode != 0 and "missing" in r.stderr and not os.path.exists(os.path.join(bdir, "usage.jsonl")),
+              "a missing image file stops the run before any request")
         smoke = os.path.join(HOME, "runs", "mock", "mm-smoke")
         subprocess.run([sys.executable, os.path.join(ROOT, "mmbench", "mm_run.py"), "--out", smoke, "--manifest", man, "--smoke"],
                        env=dict(env, MODEL="mock"), check=True)

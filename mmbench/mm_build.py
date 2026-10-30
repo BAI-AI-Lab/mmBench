@@ -139,8 +139,15 @@ def frames(video, out_dir, n=FRAMES):
     for i in range(n):
         t = dur * (i + 0.5) / n
         name = f"frame{i:02d}.jpg"
-        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{t:.3f}", "-i", video, "-frames:v", "1", "-vf",
-                        "scale='min(1280,iw)':-2", "-q:v", "3", os.path.join(out_dir, name)], check=True)
+        out = os.path.join(out_dir, name)
+        # a short clip's last segment centre can lie past its last decodable frame (the container outlasts the video
+        # stream): ffmpeg then writes nothing and still succeeds, so step back until it writes a frame
+        while t >= 0 and not os.path.exists(out):
+            subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{t:.3f}", "-i", video, "-frames:v", "1", "-vf",
+                            "scale='min(1280,iw)':-2", "-q:v", "3", out], check=True)
+            t -= 0.25
+        if not os.path.exists(out):
+            raise ValueError(f"no frame {i} from the video")
         names.append(name)
     return names
 

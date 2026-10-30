@@ -66,6 +66,10 @@ def main():
     os.makedirs(a.out, exist_ok=True)
     usage_path = os.path.join(a.out, "usage.jsonl")
     items = {i: M.load_item(i) for i in {i for i, _ in jobs}}
+    missing = [f"{i}/{f}" for i, it in sorted(items.items()) for f in (it.get("images") or []) + (it.get("frames") or [])
+               if not os.path.exists(os.path.join(M.item_dir(i), f))]
+    if missing:  # a broken item would stop the run halfway; check them all before the first paid call
+        sys.exit(f"{len(missing)} image / frame files missing, nothing asked: {', '.join(missing[:5])}")
     index = [{"q": f"{i}#{k}", "title": i, "platform": items[i]["source"], "difficulty": items[i]["tier"],
               "content": M.prompt_text(items[i])[:4000]} for i, k in jobs]
     json.dump(index, open(os.path.join(a.out, "problems.json"), "w"), ensure_ascii=False)
