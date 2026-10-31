@@ -14,7 +14,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 from matplotlib import font_manager  # noqa: E402
-from matplotlib.patches import FancyBboxPatch  # noqa: E402
+from matplotlib.patches import Rectangle  # noqa: E402
 
 ROOT = sys.argv[1] if len(sys.argv) > 1 else os.path.dirname(os.path.abspath(__file__))
 A = json.load(open(os.path.join(ROOT, "analysis.json")))
@@ -103,35 +103,36 @@ def fig1():
 
 
 def fig2():
-    """The construction and evaluation pipeline, as two rows: build once, then evaluate every model."""
+    """The construction and evaluation pipeline, as two rows: build once (solid boxes), then evaluate every model
+    (dashed boxes); outlines only, no fill."""
     fig, ax = plt.subplots(figsize=(170 * MM, 62 * MM))
-    ax.set_xlim(0, 100)
+    ax.set_xlim(-0.5, 100.5)
     ax.set_ylim(0, 46)
     ax.axis("off")
-    rows = [("构建（一次，得到固定题库）", "#F2F7FB", "#0072B2", 25,
+    rows = [("构建（一次，得到固定题库）", "-", 25,
              [("11 个公开评测集", "经 Hugging Face\ndatasets-server 按行读取"),
               ("按能力过滤", "一种技能 × 一种答题形式；\n排除测到其他能力的题"),
               ("固定种子分层抽样", "seed = 0；按子任务\n与难度轮流抽取"),
               ("下载与抽帧", "只下载抽中的题；视频\n均匀抽取 16 帧")]),
-            ("评测（每个模型）", "#F3FAF6", "#009E73", 1,
+            ("评测（每个模型）", (0, (4, 2.5)), 1,
              [("统一作答", "同一套 354 题，每题 4 次；\n统一参数，流式调用"),
               ("规则评分", "选项、是非、数值、ANLS、\n坐标；不用模型裁判"),
               ("画像与排名", "各项 95% 区间；按能力\n分层的配对 bootstrap")])]
-    for title, fc, tc, y0, steps in rows:
+    for title, ls, y0, steps in rows:
         n = len(steps)
         w = 22.0
         gap = (100 - w * 4) / 3
         x0 = (100 - (n * w + (n - 1) * gap)) / 2
-        ax.text(0.5, y0 + 18.6, title, ha="left", fontsize=6.8, color=tc, fontweight="bold")
+        ax.text(0, y0 + 18.6, title, ha="left", fontsize=6.8, fontweight="bold")
         for i, (head, body) in enumerate(steps):
             x = x0 + i * (w + gap)
-            ax.add_patch(FancyBboxPatch((x, y0), w, 16, boxstyle="round,pad=0.3,rounding_size=1.2", lw=0.6, ec=DARK, fc=fc))
+            ax.add_patch(Rectangle((x, y0), w, 16, lw=0.7, ls=ls, ec="black", fc="none"))
             ax.text(x + w / 2, y0 + 12, head, ha="center", va="center", fontsize=6.8, fontweight="bold")
             ax.text(x + w / 2, y0 + 5.5, body, ha="center", va="center", fontsize=5.6, color=DARK, linespacing=1.4)
             if i < n - 1:
                 ax.annotate("", xy=(x + w + gap - 0.6, y0 + 8), xytext=(x + w + 0.6, y0 + 8),
-                            arrowprops={"arrowstyle": "-|>", "lw": 0.6, "color": DARK})
-    ax.annotate("", xy=(50, 17.6), xytext=(50, 24.4), arrowprops={"arrowstyle": "-|>", "lw": 0.6, "color": DARK})
+                            arrowprops={"arrowstyle": "-|>", "lw": 0.6, "color": "black"})
+    ax.annotate("", xy=(50, 17.4), xytext=(50, 24.6), arrowprops={"arrowstyle": "-|>", "lw": 0.6, "color": "black"})
     ax.text(51.2, 21, "固定题库 samples/mm.json（354 个题号）", fontsize=5.6, color=DARK, va="center")
     save(fig, "fig2_pipeline")
 
