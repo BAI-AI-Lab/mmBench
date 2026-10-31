@@ -172,6 +172,15 @@ tests/                   合成题目的测试和模拟接口
 
 另外，每周一和手动触发时会对所有来源干跑一次（`--dry-run --strict`，只读元数据），数据集改名或字段变化时会报错。
 
+## 技术报告
+
+[`paper/main.pdf`](paper/main.pdf)：mmBench 的设计、构建、评分与统计方法，以及 Kimi K3.1 Pro、MiniMax M3.1 Flash、DeepSeek Flash V4.1-1017 三个模型的评测结果与成本分析。报告中的全部数字、表格与图由 `paper/` 下的脚本从运行日志生成：
+
+```bash
+MMB_HOME=<含 data/ 与 runs/ 的目录> python paper/collect.py   # 汇总运行结果（不含题目内容）
+bash paper/build.sh                                         # 统计、表格、图与 PDF（需要 xelatex）
+```
+
 mmBench 从 [codingBench](https://github.com/BAI-AI-Lab/codingBench) 的多模态部分拆出，独立维护。
 
 ---
