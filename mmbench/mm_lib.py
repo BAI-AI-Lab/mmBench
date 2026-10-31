@@ -161,6 +161,26 @@ def to_number(s):
     return None
 
 
+SCALE = {"thousand": 1e3, "k": 1e3, "million": 1e6, "mn": 1e6, "m": 1e6, "billion": 1e9, "bn": 1e9, "b": 1e9,
+         "trillion": 1e12, "tn": 1e12}
+
+
+def numbers_in(s):
+    """The readings of a short answer as a number: the answer itself ("3,200", "45%"), else the first number in it with
+    words around it ("51 million visitors", "$43.03 billion", "\\(\\xi = 0.7\\)"), as written and also scaled by a
+    magnitude word right after it ("2.6 million" -> 2.6 and 2600000). A chart answer with its unit is still the number."""
+    x = to_number(s)
+    if x is not None:
+        return [x]
+    t = str(s).replace(",", "").replace("−", "-")
+    m = re.search(r"[-+]?\d+(?:\.\d+)?", t)
+    if not m:
+        return []
+    v = float(m.group(0))
+    w = re.match(r"\s*([A-Za-z]+)", t[m.end():])
+    return [v, v * SCALE[w.group(1).lower()]] if w and w.group(1).lower() in SCALE else [v]
+
+
 def levenshtein(a, b):
     if len(a) < len(b):
         a, b = b, a
@@ -207,15 +227,15 @@ def score(it, text):
     if t in ("exact", "number"):
         if s is None:
             return 0.0, None
-        x = to_number(s)
+        xs = numbers_in(s)
         rng = it.get("range")  # an accepted interval [lo, hi] for a read-off value
-        if rng and x is not None:
-            return (1.0 if rng[0] <= x <= rng[1] else 0.0), s
+        if rng and xs:
+            return (1.0 if any(rng[0] <= x <= rng[1] for x in xs) else 0.0), s
         for g in golds:
             y = to_number(g)
-            if x is not None and y is not None:
+            if xs and y is not None:
                 tol = it.get("rel_tol", 0.01 if t == "number" else 0.0)
-                if math.isclose(x, y, rel_tol=tol, abs_tol=1e-9):
+                if any(math.isclose(x, y, rel_tol=tol, abs_tol=1e-9) for x in xs):
                     return 1.0, s
             elif norm(s) == norm(g):
                 return 1.0, s

@@ -66,6 +66,15 @@ def units():
     num = {"answer_type": "number", "answer": "3200"}
     check(M.score(num, "Answer: 3,200")[0] == 1 and M.score(num, "Answer: 3215")[0] == 1 and M.score(num, "Answer: 3300")[0] == 0,
           "number: commas, 1% tolerance")
+    cq = {"answer_type": "exact", "rel_tol": 0.05}
+    check(M.score({**cq, "answer": ["51"]}, "Answer: 51 million visitors")[0] == 1
+          and M.score({**cq, "answer": ["43.03"]}, "Answer: $43.03 billion")[0] == 1
+          and M.score({**cq, "answer": ["2582603"]}, "Answer: Approximately 2.6 million statute miles")[0] == 1
+          and M.score({"answer_type": "number", "answer": "0.7"}, "Answer: \\(\\xi = 0.7\\)")[0] == 1
+          and M.score({**cq, "answer": ["13"]}, "Answer: 8%")[0] == 0
+          and M.score({**cq, "answer": ["20"]}, "Answer: between 10 and 20")[0] == 0
+          and M.score({**cq, "answer": ["September 2012"]}, "Answer: March 2012")[0] == 0,
+          "numbers with units or magnitude words: the value counts; another value, or a text answer, does not")
     rng = {"answer_type": "number", "answer": "5", "range": [4.5, 5.5]}
     check(M.score(rng, "Answer: 5.4")[0] == 1 and M.score(rng, "Answer: 5.6")[0] == 0, "number: accepted range")
     ex = {"answer_type": "exact", "answer": ["The Blue Line", "blue"]}
