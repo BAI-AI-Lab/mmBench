@@ -191,26 +191,41 @@ tk = A["tokens"]
 mp = lambda sn: statistics.median(x["size"][0] * x["size"][1] / 1e6 for x in items.values() if x["source"] == sn and x["size"])  # noqa: E731
 over = lambda sn: sum(x["size"][0] * x["size"][1] > 1300 * 1300 for x in items.values() if x["source"] == sn and x["size"])  # noqa: E731
 nsrc = lambda sn: sum(x["source"] == sn for x in items.values())  # noqa: E731
+def ex(a, b, c):
+    """how much a's difference to b on capability c exceeds their overall difference, with its paired interval"""
+    key, sign = (f"{a}|{b}", 1) if f"{a}|{b}" in A["excess"] else (f"{b}|{a}", -1)
+    d = A["excess"][key][c]
+    lo, hi = sorted(sign * x for x in d["ci"])
+    return f"{sg(sign * d['diff'])} [{sg(lo)}, {sg(hi)}]"
+
+
+def raw(a, b, c):
+    key, sign = (f"{a}|{b}", 1) if f"{a}|{b}" in A["pairs"] else (f"{b}|{a}", -1)
+    return sg(sign * A["pairs"][key][c]["diff"])
+
+
+def vs(a, b, c):
+    return f"相对 {SN[b]}：差 {raw(a, b, c)}，超出 {ex(a, b, c)}"
+
+
+SN = {K: "Kimi", M: "MiniMax", S: "DeepSeek"}
 rows = {
     K: [
         ("坐标监督（绝对与归一化坐标）；编码器支持至 3584$^2$ 像素（K3）", "界面定位",
-         f"{cap(K, 'gui')}，三者最高；领先 MiniMax {dci(K, M, 'gui')}、DeepSeek {dci(K, S, 'gui')}，均大于总分差"
-         f"（{A['pairs'][f'{K}|{M}']['overall']['diff']:.1f}、{A['pairs'][f'{K}|{S}']['overall']['diff']:.1f}）；ScreenSpot-Pro {src['screenspot_pro'][K]:.1f}",
-         "一致，可归因"),
+         f"{cap(K, 'gui')}，三者最高。{vs(K, S, 'gui')}；{vs(K, M, 'gui')}；ScreenSpot-Pro {src['screenspot_pro'][K]:.1f}",
+         "一致，可归因（相对 DeepSeek）"),
         ("“擅长 3D 创作与空间推理”（K3.1）", "空间",
-         f"{cap(K, 'spatial')}；领先 MiniMax {dci(K, M, 'spatial')}，大于总分差；领先 DeepSeek {dci(K, S, 'spatial')}，与总分差相当",
-         "部分一致"),
+         f"{cap(K, 'spatial')}。{vs(K, M, 'spatial')}；{vs(K, S, 'spatial')}", "一致，可归因（相对 MiniMax）"),
         ("带 Python 沙箱的视觉推理强化学习，面向 STEM 视觉推理与图表（K3）", "学科推理、图表",
-         f"学科推理领先 {dci(K, M, 'reasoning')}、{dci(K, S, 'reasoning')}，小于总分差；图表领先 {dci(K, M, 'charts')}、"
-         f"{dci(K, S, 'charts')}，区间含 0；本文不提供工具", "不一致（无工具时）"),
+         f"图表：{vs(K, M, 'charts')}；{vs(K, S, 'charts')}。学科推理：超出 {ex(K, M, 'reasoning')}、{ex(K, S, 'reasoning')}。本文不提供工具",
+         "图表不一致；学科推理未见相对优势"),
         ("按 token 预算约束推理长度的强化学习（K3）", "思考效率",
          f"每次调用平均输出 {tk[K]['out']:,.0f} token（中位数 {tk[K]['out_median']:,.0f}），三者最短", "一致（token 计数跨厂商不可比）"),
         ("视频通路（帧内、帧间分解注意力）；长程编程、金融、事实准确性", "视频时序等", "本文以帧图片输入视频，其余不在本文范围", "本文未测"),
     ],
     M: [
         ("电脑操作上的“代际提升”，OSWorld 2.0 61.7；M3 可操作桌面电脑", "界面定位",
-         f"{cap(M, 'gui')}；领先 DeepSeek {dci(M, S, 'gui')}，而总分差只有 {dci(M, S, 'overall')}；落后 Kimi {A['pairs'][f'{K}|{M}']['gui']['diff']:.1f}",
-         "一致，可归因（相对 DeepSeek）"),
+         f"{cap(M, 'gui')}。{vs(M, S, 'gui')}；{vs(M, K, 'gui')}", "一致，可归因（相对 DeepSeek）"),
         ("全部层改为稀疏注意力、量化感知训练、DSpark 投机解码；称输出速度中位数 170 token/s 以上", "生成速度",
          f"首个 token 之后的生成速度中位数 {sp[M]['gen_median']:.0f} token/s，低于所称；DeepSeek 为 {sp[S]['gen_median']:.0f}",
          "不一致（国内站、8 路并发、多图输入）"),
@@ -221,16 +236,18 @@ rows = {
     ],
     S: [
         ("“视觉定位与指点”领域数据、电脑操作轨迹", "界面定位",
-         f"{cap(S, 'gui')}，三者最低；ScreenSpot-v2 {src['screenspot_v2'][S]:.1f}、ScreenSpot-Pro {src['screenspot_pro'][S]:.1f}", "不一致"),
+         f"{cap(S, 'gui')}，三者最低。{vs(S, K, 'gui')}；{vs(S, M, 'gui')}；ScreenSpot-v2 {src['screenspot_v2'][S]:.1f}、ScreenSpot-Pro {src['screenspot_pro'][S]:.1f}",
+         "不一致"),
         ("接口把总像素超过约 1300$^2$ 的图片缩小，每图至多 1024 token（设计限制）", "高分辨率细节",
          f"ScreenSpot-Pro 截图中位 {mp('screenspot_pro'):.1f} MP，{over('screenspot_pro')}/{nsrc('screenspot_pro')} 张被缩小，得分 {src['screenspot_pro'][S]:.1f}；"
          f"DocVQA {over('docvqa')}/{nsrc('docvqa')} 张被缩小，仍得 {src['docvqa'][S]:.1f}", "与设计限制一致"),
         ("OCR 领域数据", "文档",
-         f"{cap(S, 'documents')}；领先 MiniMax {dci(S, M, 'documents')}，与 Kimi 差 {dci(S, K, 'documents')}，均好于总分位置", "一致，可归因"),
+         f"{cap(S, 'documents')}。{vs(S, K, 'documents')}；{vs(S, M, 'documents')}。DocVQA 三者 "
+         f"{min(src['docvqa'].values()):.1f}--{max(src['docvqa'].values()):.1f}，接近天花板", "一致（相对 Kimi；该项接近天花板，证据弱）"),
         ("视觉推理与专业图表的评测超过 Kimi K3", "图表、学科推理",
-         f"图表与 Kimi 差 {dci(S, K, 'charts')}，好于总分差 {dci(S, K, 'overall')}；学科推理差 {dci(S, K, 'reasoning')}",
-         "图表一致；学科推理不一致"),
-        ("无空间方向的声称（只报告基座 CVBench 77.9）", "空间", f"{cap(S, 'spatial')}；领先 MiniMax {dci(S, M, 'spatial')}", "无对应声称"),
+         f"图表：{vs(S, K, 'charts')}。学科推理：超出 {ex(S, K, 'reasoning')}、{ex(S, M, 'reasoning')}",
+         "图表一致（相对 Kimi）；学科推理未见相对优势"),
+        ("无空间方向的声称（只报告基座 CVBench 77.9）", "空间", f"{cap(S, 'spatial')}。{vs(S, M, 'spatial')}", "无对应声称"),
         ("1017 版缩短输出长度（相对 0910 版）", "—",
          f"每次调用平均输出 {tk[S]['out']:,.0f} token，三者最长；没有 0910 版对照", "无法检验"),
         ("KV cache 压缩、Engram 条件记忆", "长上下文、成本", "本文单题输入短", "本文未测"),
@@ -244,7 +261,7 @@ for m in ORDER:
 write("attribution.tex", r"""
 \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{4.1cm}>{\raggedright\arraybackslash}p{1.4cm}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{2.4cm}@{}}
 \toprule
-厂商声称（来源） & 对应能力 & 本文观测（得分差与 95\% 区间） & 判定 \\
+厂商声称（来源） & 对应能力 & 本文观测（得分差；超出总分差的部分及其 95\% 区间） & 判定 \\
 \midrule
 """ + "\n".join(x for x in body if x) + r"""
 \bottomrule

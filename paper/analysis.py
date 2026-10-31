@@ -71,6 +71,14 @@ for a, b in [(0, 1), (0, 2), (1, 2)]:
     pairs[f"{ma}|{mb}"]["overall"] = {"diff": out["overall"][ma] - out["overall"][mb],
                                       "ci": ci([statistics.mean(bb[ma].values()) - statistics.mean(bb[mb].values()) for bb in boots])}
 out["pairs"] = pairs
+# how much a capability difference exceeds the overall difference of the same pair (the attribution test), paired
+excess = {}
+for a, b in [(0, 1), (0, 2), (1, 2)]:
+    ma, mb = MODELS[a], MODELS[b]
+    excess[f"{ma}|{mb}"] = {c: {"diff": pairs[f"{ma}|{mb}"][c]["diff"] - pairs[f"{ma}|{mb}"]["overall"]["diff"],
+                                "ci": ci([(bb[ma][c] - bb[mb][c]) - (statistics.mean(bb[ma].values()) - statistics.mean(bb[mb].values()))
+                                          for bb in boots])} for c in CAPS}
+out["excess"] = excess
 # sampling: avg@4, pass@4 (best sample), all@4 (worst sample), agreement
 samp = {}
 for m in MODELS:
