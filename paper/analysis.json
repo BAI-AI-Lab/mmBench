@@ -689,6 +689,29 @@
    "total_out": 6634148
   }
  },
+ "speed": {
+  "kimi-k3.1-pro": {
+   "call_median": 21.171000496821826,
+   "gen_median": 34.665688694135426,
+   "gen_aggregate": 29.424176773145117,
+   "gen_n": 1390,
+   "ttft_median": 4.570951223373413
+  },
+  "MiniMax-M3.1-Flash": {
+   "call_median": 69.1968762061309,
+   "gen_median": 133.3484781551994,
+   "gen_aggregate": 132.99516551040597,
+   "gen_n": 1002,
+   "ttft_median": 1.7317873239517212
+  },
+  "deepseek-flash": {
+   "call_median": 107.879397431256,
+   "gen_median": 128.77500781265354,
+   "gen_aggregate": 126.48870831759415,
+   "gen_n": 1192,
+   "ttft_median": 0.9065659046173096
+  }
+ },
  "cost": {
   "kimi-k3.1-pro": {
    "cny": 192.68672379999995,

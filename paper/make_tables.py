@@ -165,4 +165,111 @@ write("tokens_by_cap.tex", r"""
 """ + "\n".join(rows) + r"""
 \bottomrule
 \end{tabular}""")
+# ---------------------------------------------------------------- vendor claims against the observations (sec. results)
+K, M, S = ORDER
+src = {sname: {m: 100 * statistics.mean(statistics.mean(S_[m]["scores"][i]) for i in ids_)
+               for m in ORDER} for sname, ids_ in
+       {sn: [i for i, x in items.items() if x["source"] == sn] for sn in {x["source"] for x in items.values()}}.items()
+       for S_ in [D["runs"]]}
+
+
+def sg(x):
+    return f"{x:+.1f}".replace("-", "$-$").replace("+", "")
+
+
+def dci(a, b, c):
+    """difference a - b on capability c with its interval, as '19.0 [8.0, 29.0]'"""
+    key, sign = (f"{a}|{b}", 1) if f"{a}|{b}" in A["pairs"] else (f"{b}|{a}", -1)
+    d = A["pairs"][key][c]
+    lo, hi = sorted(sign * x for x in d["ci"])
+    return f"{sg(sign * d['diff'])} [{sg(lo)}, {sg(hi)}]"
+
+
+cap = lambda m, c: f"{A['cap'][m][c]:.1f}"  # noqa: E731
+sp = A["speed"]
+tk = A["tokens"]
+mp = lambda sn: statistics.median(x["size"][0] * x["size"][1] / 1e6 for x in items.values() if x["source"] == sn and x["size"])  # noqa: E731
+over = lambda sn: sum(x["size"][0] * x["size"][1] > 1300 * 1300 for x in items.values() if x["source"] == sn and x["size"])  # noqa: E731
+nsrc = lambda sn: sum(x["source"] == sn for x in items.values())  # noqa: E731
+rows = {
+    K: [
+        ("坐标监督（绝对与归一化坐标）；编码器支持至 3584$^2$ 像素（K3）", "界面定位",
+         f"{cap(K, 'gui')}，三者最高；领先 MiniMax {dci(K, M, 'gui')}、DeepSeek {dci(K, S, 'gui')}，均大于总分差"
+         f"（{A['pairs'][f'{K}|{M}']['overall']['diff']:.1f}、{A['pairs'][f'{K}|{S}']['overall']['diff']:.1f}）；ScreenSpot-Pro {src['screenspot_pro'][K]:.1f}",
+         "一致，可归因"),
+        ("“擅长 3D 创作与空间推理”（K3.1）", "空间",
+         f"{cap(K, 'spatial')}；领先 MiniMax {dci(K, M, 'spatial')}，大于总分差；领先 DeepSeek {dci(K, S, 'spatial')}，与总分差相当",
+         "部分一致"),
+        ("带 Python 沙箱的视觉推理强化学习，面向 STEM 视觉推理与图表（K3）", "学科推理、图表",
+         f"学科推理领先 {dci(K, M, 'reasoning')}、{dci(K, S, 'reasoning')}，小于总分差；图表领先 {dci(K, M, 'charts')}、"
+         f"{dci(K, S, 'charts')}，区间含 0；本文不提供工具", "不一致（无工具时）"),
+        ("按 token 预算约束推理长度的强化学习（K3）", "思考效率",
+         f"每次调用平均输出 {tk[K]['out']:,.0f} token（中位数 {tk[K]['out_median']:,.0f}），三者最短", "一致（token 计数跨厂商不可比）"),
+        ("视频通路（帧内、帧间分解注意力）；长程编程、金融、事实准确性", "视频时序等", "本文以帧图片输入视频，其余不在本文范围", "本文未测"),
+    ],
+    M: [
+        ("电脑操作上的“代际提升”，OSWorld 2.0 61.7；M3 可操作桌面电脑", "界面定位",
+         f"{cap(M, 'gui')}；领先 DeepSeek {dci(M, S, 'gui')}，而总分差只有 {dci(M, S, 'overall')}；落后 Kimi {A['pairs'][f'{K}|{M}']['gui']['diff']:.1f}",
+         "一致，可归因（相对 DeepSeek）"),
+        ("全部层改为稀疏注意力、量化感知训练、DSpark 投机解码；称输出速度中位数 170 token/s 以上", "生成速度",
+         f"首个 token 之后的生成速度中位数 {sp[M]['gen_median']:.0f} token/s，低于所称；DeepSeek 为 {sp[S]['gen_median']:.0f}",
+         "不一致（国内站、8 路并发、多图输入）"),
+        ("在线推理快近 3 倍、使用成本降低 70\\%（相对前代）", "—",
+         f"没有前代对照；全部评测费用 {A['cost'][M]['cny']:.2f} 元，三者最低", "无法检验"),
+        ("从第 0 步起混合多种模态训练（M3）", "全部", "没有指向具体能力", "无法单独检验"),
+        ("视频原生输入（M3 Video-MME 85.4）；智能体、编程、网络安全", "视频时序等", "本文以帧图片输入视频，其余不在本文范围", "本文未测"),
+    ],
+    S: [
+        ("“视觉定位与指点”领域数据、电脑操作轨迹", "界面定位",
+         f"{cap(S, 'gui')}，三者最低；ScreenSpot-v2 {src['screenspot_v2'][S]:.1f}、ScreenSpot-Pro {src['screenspot_pro'][S]:.1f}", "不一致"),
+        ("接口把总像素超过约 1300$^2$ 的图片缩小，每图至多 1024 token（设计限制）", "高分辨率细节",
+         f"ScreenSpot-Pro 截图中位 {mp('screenspot_pro'):.1f} MP，{over('screenspot_pro')}/{nsrc('screenspot_pro')} 张被缩小，得分 {src['screenspot_pro'][S]:.1f}；"
+         f"DocVQA {over('docvqa')}/{nsrc('docvqa')} 张被缩小，仍得 {src['docvqa'][S]:.1f}", "与设计限制一致"),
+        ("OCR 领域数据", "文档",
+         f"{cap(S, 'documents')}；领先 MiniMax {dci(S, M, 'documents')}，与 Kimi 差 {dci(S, K, 'documents')}，均好于总分位置", "一致，可归因"),
+        ("视觉推理与专业图表的评测超过 Kimi K3", "图表、学科推理",
+         f"图表与 Kimi 差 {dci(S, K, 'charts')}，好于总分差 {dci(S, K, 'overall')}；学科推理差 {dci(S, K, 'reasoning')}",
+         "图表一致；学科推理不一致"),
+        ("无空间方向的声称（只报告基座 CVBench 77.9）", "空间", f"{cap(S, 'spatial')}；领先 MiniMax {dci(S, M, 'spatial')}", "无对应声称"),
+        ("1017 版缩短输出长度（相对 0910 版）", "—",
+         f"每次调用平均输出 {tk[S]['out']:,.0f} token，三者最长；没有 0910 版对照", "无法检验"),
+        ("KV cache 压缩、Engram 条件记忆", "长上下文、成本", "本文单题输入短", "本文未测"),
+    ],
+}
+body = []
+for m in ORDER:
+    body.append(r"\multicolumn{4}{@{}l}{\textbf{" + NAME[m] + r"}} \\")
+    body += [f"{a} & {b} & {c} & {d} \\\\" for a, b, c, d in rows[m]]
+    body.append(r"\midrule" if m != ORDER[-1] else "")
+write("attribution.tex", r"""
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{4.1cm}>{\raggedright\arraybackslash}p{1.4cm}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{2.4cm}@{}}
+\toprule
+厂商声称（来源） & 对应能力 & 本文观测（得分差与 95\% 区间） & 判定 \\
+\midrule
+""" + "\n".join(x for x in body if x) + r"""
+\bottomrule
+\end{tabularx}""")
+
+# ---------------------------------------------------------------- vendor-reported scores on the sources we sample
+off = [("MMMU-Pro 标准版", "mmmu_pro", [(K, "84.1", ""), (M, "78.1", "前代 M3"), (S, "80.6", "Kimi 博客中的对比值")],
+        "本文排除表格、统计图与截图题，50 题"),
+       ("CharXiv 推理题", "charxiv", [(K, "89.0", ""), (M, "82.5", "GPT-5.5 裁判"), (S, "77.0", "Kimi 博客中的对比值")],
+        "本文 35 题、规则评分；厂商用模型裁判"),
+       ("DocVQA", "docvqa", [(S, "95.6", "基座，4-shot，模型裁判")], "本文为接口模型、ANLS"),
+       ("CV-Bench", "cvbench_3d", [(S, "77.9", "基座，4-shot，全集")], "本文只用 3D 子集，14 题")]
+body = []
+for name, sn, vals, note in off:
+    for j, (m, v, how) in enumerate(vals):
+        body.append((f"\\multirow{{{len(vals)}}}{{*}}{{{name}}}" if j == 0 else "") + f" & {NAME[m]} & {v}" +
+                    (f"（{how}）" if how else "") + f" & {src[sn][m]:.1f} & " +
+                    (f"\\multirow{{{len(vals)}}}{{*}}{{\\parbox{{4.2cm}}{{\\raggedright {note}}}}}" if j == 0 else "") + r" \\")
+    body.append(r"\midrule")
+write("official.tex", r"""
+\begin{tabular}{lllrl}
+\toprule
+评测 & 模型 & 厂商自报 & 本文子集 $\uparrow$ & 主要口径差异 \\
+\midrule
+""" + "\n".join(body[:-1]) + r"""
+\bottomrule
+\end{tabular}""")
 print("tables:", sorted(os.listdir(OUT)))

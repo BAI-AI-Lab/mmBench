@@ -113,6 +113,17 @@ for m in MODELS:
               "cap_in": {c: statistics.mean(x["in"] for x in per[c]) for c in CAPS},
               "total_in": sum(c["in"] for c in calls), "total_out": sum(c["out"] for c in calls)}
 out["tokens"] = tok
+# generation speed per call: output tokens / whole call, and output tokens / time after the first token (calls with a
+# first-token time and at least 1 s of generation after it); the aggregate is token-weighted
+speed = {}
+for m in MODELS:
+    calls = D["runs"][m]["calls"]
+    gen = [c for c in calls if c.get("ttft") is not None and c["latency"] - c["ttft"] >= 1]
+    speed[m] = {"call_median": statistics.median(c["out"] / c["latency"] for c in calls if c["latency"] > 0),
+                "gen_median": statistics.median(c["out"] / (c["latency"] - c["ttft"]) for c in gen),
+                "gen_aggregate": sum(c["out"] for c in gen) / sum(c["latency"] - c["ttft"] for c in gen),
+                "gen_n": len(gen), "ttft_median": statistics.median(c["ttft"] for c in calls if c.get("ttft") is not None)}
+out["speed"] = speed
 out["cost"] = {m: {"cny": cost(D["runs"][m]["calls"], CNY[m]), "usd": cost(D["runs"][m]["calls"], USD[m]),
                   "cny_peak": cost(D["runs"][m]["calls"], CNY[m], peak=True)} for m in MODELS}
 json.dump(out, open(os.path.join(HERE, "analysis.json"), "w"), indent=1, ensure_ascii=False)

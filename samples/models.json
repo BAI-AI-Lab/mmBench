@@ -63,5 +63,41 @@
     "https://venturebeat.com/technology/minimaxs-new-m3-1-flash-beats-deepseek-and-opus-5-on-a-key-business-benchmark-at-lower-cost-but-with-a-high-hallucination-rate"
    ]
   ]
+ },
+ "kimi-k3.1-pro": {
+  "name": "Kimi K3.1 Pro",
+  "vendor": "月之暗面（Moonshot AI）",
+  "released": "2026-10-23 发布；官方称是 Kimi K3 的后训练版本，后训练算力大幅增加；另有输出速度约 2–3 倍的 Highspeed 版",
+  "weights": "官方称 2026-11-04 前开放全部权重；前代 K3 使用 Kimi K3 License（MIT 式，附营收与用户规模条件）",
+  "architecture": "沿用 K3：MoE，总参数 2.8T、每 token 激活 104B，上下文 1M；输入文本、图像、视频；视觉编码器 MoonViT-V2（401M）以下一 token 预测从头训练，最高 3584×3584 像素输入；思考不能关闭，reasoning_effort 可选 low / high / max（默认 max）",
+  "price": "国内站每百万 token 输入 ¥13、缓存命中 ¥1.30、输出 ¥68（国际站 $2 / $0.20 / $10）",
+  "access": "月之暗面官方 API（国内站，OpenAI 兼容接口）",
+  "updates": [
+   "相较 K3：只公开了后训练改进，在数百个领域上联合强化学习，以大规模强化学习增强长程编程，并称擅长 3D 创作与空间推理",
+   "继承自 K3 的视觉训练：同时监督绝对坐标与归一化坐标以实现精确定位；带 Python 沙箱的视觉推理强化学习（裁剪、放大、计算）；图像与视频共享参数"
+  ],
+  "highlights": [
+   "厂商自报（max 深度）MMMU-Pro 84.1、CharXiv 推理题 89.0、OSWorld V2.1 79.6",
+   "厂商自报 Terminal-Bench 4.0 65.7、DeepSWE v1.1 75.5",
+   "三家中单价最高：输出 ¥68，是另外两家国内站标价（¥4；DeepSeek 高峰时段 ¥8）的 8.5–17 倍"
+  ],
+  "sources": [
+   [
+    "Kimi 技术博客：Kimi K3.1 Pro",
+    "https://www.kimi.ai/blog/kimi-k3-1-pro"
+   ],
+   [
+    "Kimi K3.1 Pro 快速开始",
+    "https://platform.kimi.ai/docs/guide/kimi-k3-1-pro-quickstart"
+   ],
+   [
+    "Kimi K3 技术报告与模型卡",
+    "https://github.com/MoonshotAI/Kimi-K3"
+   ],
+   [
+    "国内站价格",
+    "https://platform.moonshot.cn/docs/pricing/chat"
+   ]
+  ]
  }
 }

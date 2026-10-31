@@ -1,0 +1,17 @@
+\begin{tabular}{lllrl}
+\toprule
+评测 & 模型 & 厂商自报 & 本文子集 $\uparrow$ & 主要口径差异 \\
+\midrule
+\multirow{3}{*}{MMMU-Pro 标准版} & Kimi K3.1 Pro & 84.1 & 82.0 & \multirow{3}{*}{\parbox{4.2cm}{\raggedright 本文排除表格、统计图与截图题，50 题}} \\
+ & MiniMax M3.1 Flash & 78.1（前代 M3） & 75.0 &  \\
+ & DeepSeek Flash V4.1-1017 & 80.6（Kimi 博客中的对比值） & 73.5 &  \\
+\midrule
+\multirow{3}{*}{CharXiv 推理题} & Kimi K3.1 Pro & 89.0 & 71.4 & \multirow{3}{*}{\parbox{4.2cm}{\raggedright 本文 35 题、规则评分；厂商用模型裁判}} \\
+ & MiniMax M3.1 Flash & 82.5（GPT-5.5 裁判） & 67.9 &  \\
+ & DeepSeek Flash V4.1-1017 & 77.0（Kimi 博客中的对比值） & 66.4 &  \\
+\midrule
+\multirow{1}{*}{DocVQA} & DeepSeek Flash V4.1-1017 & 95.6（基座，4-shot，模型裁判） & 94.3 & \multirow{1}{*}{\parbox{4.2cm}{\raggedright 本文为接口模型、ANLS}} \\
+\midrule
+\multirow{1}{*}{CV-Bench} & DeepSeek Flash V4.1-1017 & 77.9（基座，4-shot，全集） & 98.2 & \multirow{1}{*}{\parbox{4.2cm}{\raggedright 本文只用 3D 子集，14 题}} \\
+\bottomrule
+\end{tabular}
