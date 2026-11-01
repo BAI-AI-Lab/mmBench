@@ -341,6 +341,9 @@ def index(d):
     cheap = min(d.models, key=lambda m: a["cost"][m]["cny"])
     lead_all = all(g[k][c] >= max(g[m][c] for m in d.models) for c in d.caps)
     assert lead_all and cheap == mm, "the highlight text below assumes these"
+    sp, ss = d.pair(ds, mm)
+    sp_ci, pe_ci = sorted(ss * x for x in sp["spatial"]["ci"]), sorted(ss * x for x in sp["perception"]["ci"])
+    assert sp_ci[0] > 0 and pe_ci[0] < 0 < pe_ci[1], "the 选型 text assumes these intervals"
     tiles = f"""
 <a class="card" href="results.html#rank"><p class="k">排名</p><p class="v">{signed(s_km * p_km['overall']['diff'])} 分</p>
 <p>{esc(d.names[k])} 总分 {f1(a['overall'][k])}，比 {esc(d.names[mm])} 高 {f1(s_km * p_km['overall']['diff'])} 分（区间 {sci(*sorted(s_km * x for x in p_km['overall']['ci']))}），比 {esc(d.names[ds])} 高 {f1(s_kd * p_kd['overall']['diff'])} 分。后两者相差 {f1(abs(p_md['overall']['diff']))} 分，区间含 0，并列第 2。</p></a>
@@ -351,7 +354,7 @@ def index(d):
 <a class="card" href="results.html#cost"><p class="k">费用</p><p class="v">¥{a['cost'][mm]['cny'] / len(d.ids):.3f} / 题</p>
 <p>{esc(d.names[mm])} 最便宜，全部调用 ¥{a['cost'][mm]['cny']:.2f}；DeepSeek ¥{a['cost'][ds]['cny']:.2f}，Kimi ¥{a['cost'][k]['cny']:.2f}（约 {a['cost'][k]['cny'] / a['cost'][mm]['cny']:.0f} 倍）。</p></a>
 <div class="card wide"><p class="k">选型</p>
-<p>要准确率选 {esc(d.names[k])}：7 项能力得分都最高，但费用最高、生成最慢（{a['speed'][k]['gen_median']:.0f} token/秒）。要成本选 {esc(d.names[mm])}：与 DeepSeek 并列第 2，费用约为其一半，生成 {a['speed'][mm]['gen_median']:.0f} token/秒。{esc(d.names[ds])} 的空间与视觉感知强于 MiniMax，但界面定位只有 {f1(g[ds]['gui'])}。</p></div>"""
+<p>要准确率选 {esc(d.names[k])}：7 项能力得分都最高，但费用最高、生成最慢（{a['speed'][k]['gen_median']:.0f} token/秒）。要成本选 {esc(d.names[mm])}：与 DeepSeek 并列第 2，费用约为其一半，生成 {a['speed'][mm]['gen_median']:.0f} token/秒。{esc(d.names[ds])} 的空间明显强于 MiniMax（视觉感知也更高，但区间含 0），界面定位只有 {f1(g[ds]['gui'])}。</p></div>"""
     groups = [(CAP_ZH[c], f"{cap_items(d, c)} 题", {m: g[m][c] for m in d.models}, a["chance"][c], "") for c in d.caps]
     body = f"""<section class="hero"><div class="wrap">
 <p class="eyebrow">mmBench · {DATA_DATE}</p>
