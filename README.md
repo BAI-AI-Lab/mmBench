@@ -11,6 +11,8 @@ mmBench 测"看得懂图的模型"：输入图片、图表、文档、截图或�
 
 题目从 11 个公开评测集按固定随机种子抽取，同一个种子永远抽出同一套题。打分只用确定的规则，不用模型当裁判。
 
+**结果网站：** <https://bai-ai-lab.github.io/mmBench/>：2026-10-31 三个模型的能力画像、排名、费用，评测集说明和逐题结果。网站由 `python web/build.py` 从 `paper/` 的数据生成到 `docs/`（GitHub Pages），不含题面和图片。
+
 ## 7 项能力
 
 | 能力 | 测什么 | 答题形式 | 来源（题数） | 难度 | 为了不重叠，排除了什么 |
@@ -122,6 +124,7 @@ mmbench/mm_render.py     Markdown / LaTeX 表格、符号检验、token 与费�
 mmbench/mm_figures.py    能力画像柱状图（需要 matplotlib）
 samples/models.json      报告"模型简介"一节的资料
 tests/                   合成题目的测试和模拟接口
+web/build.py             结果网站：读 paper/ 的数据，写 docs/（GitHub Pages）
 ```
 
 运行目录里有：

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>多模态评测 · BAI AI Lab</title>
+<meta name="description" content="Kimi K3.1 Pro、MiniMax M3.1 Flash、DeepSeek Flash V4.1-1017 在 mmBench 7 项能力上的评测结果">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<nav class="nav"><div class="nav-in"><a class="brand" href="index.html"><span class="hide-sm">BAI AI Lab </span>多模态评测</a><ul><li><a href="index.html" aria-current=page>概览</a></li><li><a href="results.html">结果</a></li><li><a href="bench.html">评测集</a></li><li><a href="questions.html">题目</a></li><li><a href="report-2026-10-31.pdf">报告</a></li></ul></div></nav>
+<main>
+<section class="hero"><div class="wrap">
+<p class="eyebrow">mmBench · 2026-10-31</p>
+<h1>多模态评测</h1>
+<p class="lead"><span class="nw">Kimi K3.1 Pro</span>、<span class="nw">MiniMax M3.1 Flash</span>、<span class="nw">DeepSeek Flash V4.1-1017</span>：<span class="nw">7 项能力，354 道题，</span><span class="nw">每题作答 4 次。</span></p>
+<div class="ctas"><a class="btn" href="results.html">查看结果</a><a class="more" href="questions.html">逐题结果</a><a class="more" href="report-2026-10-31.pdf">下载技术报告（PDF）</a></div>
+</div></section>
+<section class="section alt"><div class="wrap">
+<h2>三个模型</h2>
+<p class="sub">总分是 7 项能力的等权平均（0–100）。两两总分差的 95% 区间不含 0 才算分出高下，名次相同表示差距在误差内。</p>
+<div class="compare" style="--rows:9"><div class="model"><div><span class="dot kimi"></span><h3><span class="long">Kimi K3.1 Pro</span><span class="short">Kimi</span></h3><div class="id">kimi-k3.1-pro</div></div><div class="big">85.3</div><div class="cap">总分 ↑ · 第 1 名<br>95% 区间 81.9–88.6</div><ul class="specs"><li><b>空间 93.5</b><span>最强能力 · 得分 ↑</span></li><li><b>图表 76.0</b><span>最弱能力 · 得分 ↑</span></li><li><b>¥192.69</b><span>全部 1,416 次调用费用 ↓</span></li><li><b>¥0.544</b><span>每题费用 ↓</span></li><li><b>11.4 秒</b><span>延迟中位数 ↓</span></li><li><b>35</b><span>生成速度 token/秒 ↑</span></li></ul></div><div class="model"><div><span class="dot minimax"></span><h3><span class="long">MiniMax M3.1 Flash</span><span class="short">MiniMax</span></h3><div class="id">MiniMax-M3.1-Flash</div></div><div class="big">74.5</div><div class="cap">总分 ↑ · 第 2 名<br>95% 区间 70.6–78.2</div><ul class="specs"><li><b>视频时序 85.5</b><span>最强能力 · 得分 ↑</span></li><li><b>界面定位 57.5</b><span>最弱能力 · 得分 ↑</span></li><li><b>¥14.45</b><span>全部 1,416 次调用费用 ↓</span></li><li><b>¥0.041</b><span>每题费用 ↓</span></li><li><b>4.3 秒</b><span>延迟中位数 ↓</span></li><li><b>133</b><span>生成速度 token/秒 ↑</span></li></ul></div><div class="model"><div><span class="dot deepseek"></span><h3><span class="long">DeepSeek Flash V4.1-1017</span><span class="short">DeepSeek</span></h3><div class="id">deepseek-flash</div></div><div class="big">73.7</div><div class="cap">总分 ↑ · 第 2 名<br>95% 区间 70.1–77.5</div><ul class="specs"><li><b>文档 87.1</b><span>最强能力 · 得分 ↑</span></li><li><b>界面定位 36.5</b><span>最弱能力 · 得分 ↑</span></li><li><b>¥27.51</b><span>全部 1,416 次调用费用 ↓</span></li><li><b>¥0.078</b><span>每题费用 ↓</span></li><li><b>6.1 秒</b><span>延迟中位数 ↓</span></li><li><b>129</b><span>生成速度 token/秒 ↑</span></li></ul></div></div>
+<p class="note">↑ 越大越好，↓ 越小越好。费用按各厂商国内站标价与实际 token 计算；延迟、生成速度为每次调用的中位数，生成速度从首个 token 起算。</p>
+</div></section>
+<section class="section"><div class="wrap">
+<h2>能力画像</h2>
+<p class="sub">每项能力只考一种技能、只用一种答题形式。竖线是随机猜测的期望得分。</p>
+<ul class="legend"><li><i class="kimi-bg"></i>Kimi K3.1 Pro</li><li><i class="minimax-bg"></i>MiniMax M3.1 Flash</li><li><i class="deepseek-bg"></i>DeepSeek Flash V4.1-1017</li><li><span class="chance-key"></span>随机猜测</li></ul>
+<div class="bars"><div class="bgrp "><h4>学科推理<span>50 题</span></h4><div class="brow"><span>Kimi</span><span class="track"><span class="fill kimi-bg" style="width:82.0%"></span><span class="chance" style="left:12.9%"></span></span><span class="bval">82.0</span></div><div class="brow"><span>MiniMax</span><span class="track"><span class="fill minimax-bg" style="width:75.0%"></span><span class="chance" style="left:12.9%"></span></span><span class="bval">75.0</span></div><div class="brow"><span>DeepSeek</span><span class="track"><span class="fill deepseek-bg" style="width:73.5%"></span><span class="chance" style="left:12.9%"></span></span><span class="bval">73.5</span></div></div><div class="bgrp "><h4>视觉感知<span>54 题</span></h4><div class="brow"><span>Kimi</span><span class="track"><span class="fill kimi-bg" style="width:89.8%"></span><span class="chance" style="left:34.3%"></span></span><span class="bval">89.8</span></div><div class="brow"><span>MiniMax</span><span class="track"><span class="fill minimax-bg" style="width:73.6%"></span><span class="chance" style="left:34.3%"></span></span><span class="bval">73.6</span></div><div class="brow"><span>DeepSeek</span><span class="track"><span class="fill deepseek-bg" style="width:79.2%"></span><span class="chance" style="left:34.3%"></span></span><span class="bval">79.2</span></div></div><div class="bgrp "><h4>图表<span>50 题</span></h4><div class="brow"><span>Kimi</span><span class="track"><span class="fill kimi-bg" style="width:76.0%"></span><span class="chance" style="left:0.0%"></span></span><span class="bval">76.0</span></div><div class="brow"><span>MiniMax</span><span class="track"><span class="fill minimax-bg" style="width:73.5%"></span><span class="chance" style="left:0.0%"></span></span><span class="bval">73.5</span></div><div class="brow"><span>DeepSeek</span><span class="track"><span class="fill deepseek-bg" style="width:72.5%"></span><span class="chance" style="left:0.0%"></span></span><span class="bval">72.5</span></div></div><div class="bgrp "><h4>文档<span>50 题</span></h4><div class="brow"><span>Kimi</span><span class="track"><span class="fill kimi-bg" style="width:88.6%"></span><span class="chance" style="left:0.0%"></span></span><span class="bval">88.6</span></div><div class="brow"><span>MiniMax</span><span class="track"><span class="fill minimax-bg" style="width:84.8%"></span><span class="chance" style="left:0.0%"></span></span><span class="bval">84.8</span></div><div class="brow"><span>DeepSeek</span><span class="track"><span class="fill deepseek-bg" style="width:87.1%"></span><span class="chance" style="left:0.0%"></span></span><span class="bval">87.1</span></div></div><div class="bgrp "><h4>空间<span>50 题</span></h4><div class="brow"><span>Kimi</span><span class="track"><span class="fill kimi-bg" style="width:93.5%"></span><span class="chance" style="left:42.0%"></span></span><span class="bval">93.5</span></div><div class="brow"><span>MiniMax</span><span class="track"><span class="fill minimax-bg" style="width:71.5%"></span><span class="chance" style="left:42.0%"></span></span><span class="bval">71.5</span></div><div class="brow"><span>DeepSeek</span><span class="track"><span class="fill deepseek-bg" style="width:83.0%"></span><span class="chance" style="left:42.0%"></span></span><span class="bval">83.0</span></div></div><div class="bgrp "><h4>界面定位<span>50 题</span></h4><div class="brow"><span>Kimi</span><span class="track"><span class="fill kimi-bg" style="width:76.5%"></span><span class="chance" style="left:1.3%"></span></span><span class="bval">76.5</span></div><div class="brow"><span>MiniMax</span><span class="track"><span class="fill minimax-bg" style="width:57.5%"></span><span class="chance" style="left:1.3%"></span></span><span class="bval">57.5</span></div><div class="brow"><span>DeepSeek</span><span class="track"><span class="fill deepseek-bg" style="width:36.5%"></span><span class="chance" style="left:1.3%"></span></span><span class="bval">36.5</span></div></div><div class="bgrp "><h4>视频时序<span>50 题</span></h4><div class="brow"><span>Kimi</span><span class="track"><span class="fill kimi-bg" style="width:91.0%"></span><span class="chance" style="left:50.0%"></span></span><span class="bval">91.0</span></div><div class="brow"><span>MiniMax</span><span class="track"><span class="fill minimax-bg" style="width:85.5%"></span><span class="chance" style="left:50.0%"></span></span><span class="bval">85.5</span></div><div class="brow"><span>DeepSeek</span><span class="track"><span class="fill deepseek-bg" style="width:84.5%"></span><span class="chance" style="left:50.0%"></span></span><span class="bval">84.5</span></div></div></div>
+<p class="note">得分 ↑ 越大越好。区间与两两差见 <a href="results.html#profile">结果</a>。</p>
+</div></section>
+<section class="section alt"><div class="wrap">
+<h2>要点</h2>
+<p class="sub">数字均来自本次评测记录，计算方法见“评测集”。</p>
+<div class="tiles">
+<a class="card" href="results.html#rank"><p class="k">排名</p><p class="v">+10.9 分</p>
+<p>Kimi K3.1 Pro 总分 85.3，比 MiniMax M3.1 Flash 高 10.9 分（区间 +8.0 至 +13.7），比 DeepSeek Flash V4.1-1017 高 11.6 分。后两者相差 0.7 分，区间含 0，并列第 2。</p></a>
+<a class="card" href="results.html#source"><p class="k">差距最大：界面定位</p><p class="v">40.0 分</p>
+<p>Kimi 76.5、MiniMax 57.5、DeepSeek 36.5。在专业软件截图 ScreenSpot-Pro 上分别为 60.8、35.0、8.3。</p></a>
+<a class="card" href="results.html#profile"><p class="k">空间</p><p class="v">93.5</p>
+<p>Kimi 的最强项。只看少数视角推断方位的 MindCube 上，Kimi 95.0、DeepSeek 75.0、MiniMax 56.2。</p></a>
+<a class="card" href="results.html#cost"><p class="k">费用</p><p class="v">¥0.041 / 题</p>
+<p>MiniMax M3.1 Flash 最便宜，全部调用 ¥14.45；DeepSeek ¥27.51，Kimi ¥192.69（约 13 倍）。</p></a>
+<div class="card wide"><p class="k">选型</p>
+<p>要准确率选 Kimi K3.1 Pro：7 项能力得分都最高，但费用最高、生成最慢（35 token/秒）。要成本选 MiniMax M3.1 Flash：与 DeepSeek 并列第 2，费用约为其一半，生成 133 token/秒。DeepSeek Flash V4.1-1017 的空间与视觉感知强于 MiniMax，但界面定位只有 36.5。</p></div>
+</div>
+</div></section>
+</main>
+<footer><div class="wrap">
+<p>BAI AI Lab 多模态评测 mmBench · 数据截至 2026-10-31</p>
+<p>题目抽自 11 个公开评测集，题面与图片版权归原作者，本站只列题号、题型与得分。评测代码：<a href="https://github.com/BAI-AI-Lab/mmBench">BAI-AI-Lab/mmBench</a>；全部数据：<a href="data/mmbench.json">data/mmbench.json</a>。另见 <a href="https://bai-ai-lab.github.io/coding-eval/">代码能力评测</a>。</p>
+<p>由 <a href="https://alberthx86.github.io/" target="_blank" rel="noopener">Albert Huang</a> 创建于 2026-11-01</p>
+</div></footer>
+<script src="assets/app.js"></script>
+</body>
+</html>

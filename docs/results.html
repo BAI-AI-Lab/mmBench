@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>结果 · 多模态评测</title>
+<meta name="description" content="mmBench 评测结果：能力得分、排名、难度、来源、稳定性、费用与速度">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<nav class="nav"><div class="nav-in"><a class="brand" href="index.html"><span class="hide-sm">BAI AI Lab </span>多模态评测</a><ul><li><a href="index.html">概览</a></li><li><a href="results.html" aria-current=page>结果</a></li><li><a href="bench.html">评测集</a></li><li><a href="questions.html">题目</a></li><li><a href="report-2026-10-31.pdf">报告</a></li></ul></div></nav>
+<main>
+<section class="hero"><div class="wrap">
+<p class="eyebrow">354 题 × 4 次 · 2026-10-31</p>
+<h1>结果</h1>
+<p class="lead">能力得分、排名、难度、来源、作答稳定性、费用与速度。</p>
+</div></section>
+<section class="section alt" id="profile"><div class="wrap">
+<h2>各项能力</h2>
+<p class="sub">每题 4 次作答取平均，再按能力平均（0–100）。小字为 95% 区间（按题重抽样 2,000 次）。</p>
+<div class="tw"><table><thead><tr><th>能力</th><th class="n">题数</th><th class="n">随机猜测</th><th class="n"><span class="dot kimi"></span> Kimi ↑</th><th class="n"><span class="dot minimax"></span> MiniMax ↑</th><th class="n"><span class="dot deepseek"></span> DeepSeek ↑</th></tr></thead><tbody><tr><td>学科推理</td><td class="n">50</td><td class="n">12.9</td><td class="n best">82.0<span class="ci">72.0–90.5</span></td><td class="n">75.0<span class="ci">64.0–85.0</span></td><td class="n">73.5<span class="ci">62.5–83.5</span></td></tr><tr><td>视觉感知</td><td class="n">54</td><td class="n">34.3</td><td class="n best">89.8<span class="ci">81.9–96.3</span></td><td class="n">73.6<span class="ci">63.9–82.4</span></td><td class="n">79.2<span class="ci">68.5–88.4</span></td></tr><tr><td>图表</td><td class="n">50</td><td class="n">0.0</td><td class="n best">76.0<span class="ci">64.0–87.5</span></td><td class="n">73.5<span class="ci">62.0–85.0</span></td><td class="n">72.5<span class="ci">60.5–84.5</span></td></tr><tr><td>文档</td><td class="n">50</td><td class="n">0.0</td><td class="n best">88.6<span class="ci">80.1–95.4</span></td><td class="n">84.8<span class="ci">75.0–92.7</span></td><td class="n">87.1<span class="ci">77.5–94.6</span></td></tr><tr><td>空间</td><td class="n">50</td><td class="n">42.0</td><td class="n best">93.5<span class="ci">87.5–98.5</span></td><td class="n">71.5<span class="ci">60.5–81.5</span></td><td class="n">83.0<span class="ci">75.0–90.0</span></td></tr><tr><td>界面定位</td><td class="n">50</td><td class="n">1.3</td><td class="n best">76.5<span class="ci">65.0–87.0</span></td><td class="n">57.5<span class="ci">47.0–68.0</span></td><td class="n">36.5<span class="ci">25.0–48.0</span></td></tr><tr class=grp><td>视频时序</td><td class="n">50</td><td class="n">50.0</td><td class="n best">91.0<span class="ci">83.0–98.0</span></td><td class="n">85.5<span class="ci">76.5–93.0</span></td><td class="n">84.5<span class="ci">74.5–92.5</span></td></tr><tr><td>总分（等权）</td><td class="n">354</td><td class="n">20.1</td><td class="n best">85.3<span class="ci">81.9–88.6</span></td><td class="n">74.5<span class="ci">70.6–78.2</span></td><td class="n">73.7<span class="ci">70.1–77.5</span></td></tr></tbody></table></div>
+<p class="note">↑ 越大越好；加粗为该行最高。随机猜测为逐题的期望得分，题数只描述规模。</p>
+</div></section>
+<section class="section" id="rank"><div class="wrap">
+<h2>排名</h2>
+<p class="sub">名次 = 1 + 明显强于它的模型数；总分差的 95% 区间包含 0 时名次相同。</p>
+<div class="tw"><table><thead><tr><th>名次</th><th>模型</th><th class="n">总分 ↑</th><th class="n">95% 区间</th></tr></thead><tbody><tr><td>1</td><td><span class="dot kimi"></span> Kimi K3.1 Pro</td><td class="n">85.3</td><td class="n">81.9–88.6</td></tr><tr><td>2</td><td><span class="dot minimax"></span> MiniMax M3.1 Flash</td><td class="n">74.5</td><td class="n">70.6–78.2</td></tr><tr><td>2</td><td><span class="dot deepseek"></span> DeepSeek Flash V4.1-1017</td><td class="n">73.7</td><td class="n">70.1–77.5</td></tr></tbody></table></div>
+<h3>两两比较</h3>
+<div class="tw"><table><thead><tr><th>比较</th><th class="n">总分差</th><th class="n">95% 区间</th><th class="n">更好</th><th class="n">相同</th><th class="n">更差</th><th class="n">符号检验 p</th></tr></thead><tbody><tr><td>Kimi − MiniMax</td><td class="n">+10.9</td><td class="n">+8.0 至 +13.7</td><td class="n">90</td><td class="n">249</td><td class="n">15</td><td class="n">&lt; 0.001</td></tr><tr><td>Kimi − DeepSeek</td><td class="n">+11.6</td><td class="n">+9.0 至 +14.5</td><td class="n">79</td><td class="n">267</td><td class="n">8</td><td class="n">&lt; 0.001</td></tr><tr><td>MiniMax − DeepSeek</td><td class="n">+0.7</td><td class="n">-1.9 至 +3.5</td><td class="n">55</td><td class="n">247</td><td class="n">52</td><td class="n">0.847</td></tr></tbody></table></div>
+<p class="note">总分差为正表示前者更高，区间来自成对重抽样。更好 / 相同 / 更差为逐题比较的题数（每题 4 次的平均分），p 为精确符号检验。按这套题的题量，小于约 ±2.7 分的总分差分不出来。</p>
+<h3>各项能力的两两差</h3>
+<div class="tw"><table><thead><tr><th>能力</th><th class="n">Kimi − MiniMax</th><th class="n">Kimi − DeepSeek</th><th class="n">MiniMax − DeepSeek</th></tr></thead><tbody><tr><td>学科推理</td><td class="n best">+7.0<span class="ci">+2.0 至 +13.0</span></td><td class="n best">+8.5<span class="ci">+3.5 至 +14.5</span></td><td class="n">+1.5<span class="ci">-3.0 至 +7.0</span></td></tr><tr><td>视觉感知</td><td class="n best">+16.2<span class="ci">+8.8 至 +24.1</span></td><td class="n best">+10.6<span class="ci">+3.7 至 +19.0</span></td><td class="n">-5.6<span class="ci">-15.3 至 +4.6</span></td></tr><tr><td>图表</td><td class="n">+2.5<span class="ci">-2.0 至 +8.0</span></td><td class="n">+3.5<span class="ci">-2.0 至 +9.5</span></td><td class="n">+1.0<span class="ci">-5.0 至 +7.0</span></td></tr><tr><td>文档</td><td class="n best">+3.8<span class="ci">+1.3 至 +6.8</span></td><td class="n">+1.5<span class="ci">0.0 至 +4.0</span></td><td class="n best">-2.3<span class="ci">-4.3 至 -0.6</span></td></tr><tr><td>空间</td><td class="n best">+22.0<span class="ci">+13.0 至 +33.0</span></td><td class="n best">+10.5<span class="ci">+2.0 至 +19.0</span></td><td class="n best">-11.5<span class="ci">-21.5 至 -2.5</span></td></tr><tr><td>界面定位</td><td class="n best">+19.0<span class="ci">+8.0 至 +29.0</span></td><td class="n best">+40.0<span class="ci">+28.5 至 +51.0</span></td><td class="n best">+21.0<span class="ci">+13.5 至 +29.0</span></td></tr><tr><td>视频时序</td><td class="n">+5.5<span class="ci">-1.0 至 +13.0</span></td><td class="n best">+6.5<span class="ci">+0.5 至 +14.0</span></td><td class="n">+1.0<span class="ci">-4.5 至 +6.5</span></td></tr></tbody></table></div>
+<p class="note">加粗：95% 区间不含 0，即该项上差距明显。小字为区间。</p>
+</div></section>
+<section class="section alt" id="tier"><div class="wrap">
+<h2>按难度</h2>
+<p class="sub">所有能力合在一起按题平均。难度越高，Kimi 与另两个模型的差距越大。</p>
+<div class="tw"><table><thead><tr><th>难度</th><th class="n">题数</th><th class="n"><span class="dot kimi"></span> Kimi ↑</th><th class="n"><span class="dot minimax"></span> MiniMax ↑</th><th class="n"><span class="dot deepseek"></span> DeepSeek ↑</th></tr></thead><tbody><tr><td>L1 基础</td><td class="n">96</td><td class="n best">92.8</td><td class="n">90.0</td><td class="n">88.1</td></tr><tr><td>L2 中等</td><td class="n">107</td><td class="n best">87.1</td><td class="n">73.6</td><td class="n">78.7</td></tr><tr><td>L3 困难</td><td class="n">151</td><td class="n best">79.5</td><td class="n">65.2</td><td class="n">61.3</td></tr></tbody></table></div>
+<p class="note">↑ 越大越好。难度按来源对当前模型是否已饱和划分，MMMU-Pro 用其自带的难度标签逐题分档。</p>
+</div></section>
+<section class="section" id="source"><div class="wrap">
+<h2>按来源</h2>
+<p class="sub">每个来源只抽了一部分题，不等于该评测集的完整成绩。</p>
+<div class="tw"><table><thead><tr><th>能力</th><th>来源</th><th>难度</th><th class="n">题数</th><th class="n"><span class="dot kimi"></span> Kimi ↑</th><th class="n"><span class="dot minimax"></span> MiniMax ↑</th><th class="n"><span class="dot deepseek"></span> DeepSeek ↑</th></tr></thead><tbody><tr class=grp><td>学科推理</td><td>MMMU-Pro 标准版</td><td>L1/L2/L3</td><td class="n">50</td><td class="n best">82.0</td><td class="n">75.0</td><td class="n">73.5</td></tr><tr class=grp><td>视觉感知</td><td>BLINK</td><td>L2</td><td class="n">54</td><td class="n best">89.8</td><td class="n">73.6</td><td class="n">79.2</td></tr><tr><td>图表</td><td>ChartQA</td><td>L1</td><td class="n">15</td><td class="n best">86.7</td><td class="n best">86.7</td><td class="n best">86.7</td></tr><tr class=grp><td></td><td>CharXiv 推理题</td><td>L3</td><td class="n">35</td><td class="n best">71.4</td><td class="n">67.9</td><td class="n">66.4</td></tr><tr><td>文档</td><td>DocVQA</td><td>L1</td><td class="n">30</td><td class="n best">94.4</td><td class="n">93.8</td><td class="n">94.3</td></tr><tr class=grp><td></td><td>OCRBench 关键信息抽取</td><td>L2</td><td class="n">20</td><td class="n best">79.9</td><td class="n">71.3</td><td class="n">76.2</td></tr><tr><td>空间</td><td>CV-Bench 3D</td><td>L1</td><td class="n">14</td><td class="n best">98.2</td><td class="n">92.9</td><td class="n best">98.2</td></tr><tr><td></td><td>BLINK 空间子任务</td><td>L2</td><td class="n">16</td><td class="n best">87.5</td><td class="n">71.9</td><td class="n">79.7</td></tr><tr class=grp><td></td><td>MindCube</td><td>L3</td><td class="n">20</td><td class="n best">95.0</td><td class="n">56.2</td><td class="n">75.0</td></tr><tr><td>界面定位</td><td>ScreenSpot-v2</td><td>L1</td><td class="n">20</td><td class="n best">100.0</td><td class="n">91.2</td><td class="n">78.8</td></tr><tr class=grp><td></td><td>ScreenSpot-Pro</td><td>L3</td><td class="n">30</td><td class="n best">60.8</td><td class="n">35.0</td><td class="n">8.3</td></tr><tr><td>视频时序</td><td>TimeBlind</td><td>L3</td><td class="n">50</td><td class="n best">91.0</td><td class="n">85.5</td><td class="n">84.5</td></tr></tbody></table></div>
+<p class="note">↑ 越大越好；加粗为该行最高。各来源的题目说明见 <a href="questions.html">题目</a>。</p>
+</div></section>
+<section class="section alt" id="sampling"><div class="wrap">
+<h2>同一道题答 4 次</h2>
+<p class="sub">avg@4 是本站使用的分数；pass@4 为 4 次中至少一次答对，all@4 为 4 次全对。</p>
+<div class="tw"><table><thead><tr><th>模型</th><th class="n">avg@4 ↑</th><th class="n">pass@4 ↑</th><th class="n">all@4 ↑</th><th class="n">4 次结果不一的题 ↓</th></tr></thead><tbody><tr><td><span class="dot kimi"></span> Kimi K3.1 Pro</td><td class="n">85.3</td><td class="n">89.6</td><td class="n">81.3</td><td class="n">30（8%）</td></tr><tr><td><span class="dot minimax"></span> MiniMax M3.1 Flash</td><td class="n">74.5</td><td class="n">84.7</td><td class="n">62.6</td><td class="n">82（23%）</td></tr><tr><td><span class="dot deepseek"></span> DeepSeek Flash V4.1-1017</td><td class="n">73.7</td><td class="n">82.0</td><td class="n">65.7</td><td class="n">61（17%）</td></tr></tbody></table></div>
+<p class="note">↑ 越大越好，↓ 越小越好。“结果不一”指同一道题 4 次作答有对有错，越少说明单次结果越稳定。</p>
+</div></section>
+<section class="section" id="cost"><div class="wrap">
+<h2>费用与速度</h2>
+<p class="sub">每个模型 1,416 次调用（354 题 × 4 次）。token 为每次调用的平均值。</p>
+<div class="tw"><table><thead><tr><th>模型</th><th class="n">输入 token</th><th class="n">其中缓存</th><th class="n">输出 token（中位数）</th><th class="n">思考占比</th><th class="n">延迟 秒 ↓</th><th class="n">首 token 秒 ↓</th><th class="n">生成 token/秒 ↑</th><th class="n">费用 元 ↓</th><th class="n">元 / 题 ↓</th><th class="n">美元参考 ↓</th></tr></thead><tbody><tr><td><span class="dot kimi"></span> Kimi K3.1 Pro</td><td class="n">5,973</td><td class="n">425</td><td class="n">932（221）</td><td class="n">97.8%</td><td class="n">11.4</td><td class="n">4.6</td><td class="n">35</td><td class="n">192.69</td><td class="n">0.544</td><td class="n">$29.03</td></tr><tr><td><span class="dot minimax"></span> MiniMax M3.1 Flash</td><td class="n">5,407</td><td class="n">2,876</td><td class="n">1,847（250）</td><td class="n">99.3%</td><td class="n">4.3</td><td class="n">1.7</td><td class="n">133</td><td class="n">14.45</td><td class="n">0.041</td><td class="n">$2.17</td></tr><tr><td><span class="dot deepseek"></span> DeepSeek Flash V4.1-1017</td><td class="n">2,257</td><td class="n">1,601</td><td class="n">4,685（709）</td><td class="n">99.5%</td><td class="n">6.1</td><td class="n">0.9</td><td class="n">129</td><td class="n">27.51</td><td class="n">0.078</td><td class="n">$4.13</td></tr></tbody></table></div>
+<p class="note">↑ 越大越好，↓ 越小越好；token 数只描述用量，不标方向。费用按各厂商国内站标价（元 / 百万 token）与实际 token 计算：Kimi 输入 13、缓存 1.30、输出 68；MiniMax 1 / 0.10 / 4；DeepSeek 非高峰 1 / 0.02 / 4。本次 DeepSeek 调用都在非高峰时段，按高峰价为 ¥55.02。美元为参考价。</p>
+<h3>各项能力的平均输出 token</h3>
+<div class="tw"><table><thead><tr><th>能力</th><th class="n"><span class="dot kimi"></span> Kimi</th><th class="n"><span class="dot minimax"></span> MiniMax</th><th class="n"><span class="dot deepseek"></span> DeepSeek</th></tr></thead><tbody><tr><td>学科推理</td><td class="n">2,318</td><td class="n">4,267</td><td class="n">9,700</td></tr><tr><td>视觉感知</td><td class="n">960</td><td class="n">2,211</td><td class="n">3,888</td></tr><tr><td>图表</td><td class="n">742</td><td class="n">1,191</td><td class="n">5,964</td></tr><tr><td>文档</td><td class="n">144</td><td class="n">164</td><td class="n">200</td></tr><tr><td>空间</td><td class="n">1,328</td><td class="n">1,762</td><td class="n">7,810</td></tr><tr><td>界面定位</td><td class="n">603</td><td class="n">2,377</td><td class="n">847</td></tr><tr><td>视频时序</td><td class="n">428</td><td class="n">927</td><td class="n">4,451</td></tr></tbody></table></div>
+<p class="note">每次调用的平均输出 token（含思考），只描述用量。</p>
+</div></section>
+<section class="section alt" id="official"><div class="wrap">
+<h2>与厂商自报成绩对照</h2>
+<p class="sub">口径不同，只作参考：本站是子集、规则评分；厂商成绩多用全集或模型裁判。</p>
+<div class="tw"><table><thead><tr><th>评测</th><th>模型</th><th>厂商自报</th><th class="n">本站子集 ↑</th><th>口径差异</th></tr></thead><tbody><tr><td>MMMU-Pro 标准版</td><td><span class="dot kimi"></span> Kimi</td><td>84.1</td><td class="n">82.0</td><td class="sec">本站排除表格、统计图与截图题，50 题</td></tr><tr><td></td><td><span class="dot minimax"></span> MiniMax</td><td>78.1（前代 M3）</td><td class="n">75.0</td><td class="sec"></td></tr><tr class=grp><td></td><td><span class="dot deepseek"></span> DeepSeek</td><td>80.6（Kimi 博客中的对比值）</td><td class="n">73.5</td><td class="sec"></td></tr><tr><td>CharXiv 推理题</td><td><span class="dot kimi"></span> Kimi</td><td>89.0</td><td class="n">71.4</td><td class="sec">本站 35 题、规则评分；厂商用模型裁判</td></tr><tr><td></td><td><span class="dot minimax"></span> MiniMax</td><td>82.5（GPT-5.5 裁判）</td><td class="n">67.9</td><td class="sec"></td></tr><tr class=grp><td></td><td><span class="dot deepseek"></span> DeepSeek</td><td>77.0（Kimi 博客中的对比值）</td><td class="n">66.4</td><td class="sec"></td></tr><tr class=grp><td>DocVQA</td><td><span class="dot deepseek"></span> DeepSeek</td><td>95.6（基座，4-shot，模型裁判）</td><td class="n">94.3</td><td class="sec">本站为接口模型、ANLS</td></tr><tr><td>CV-Bench</td><td><span class="dot deepseek"></span> DeepSeek</td><td>77.9（基座，4-shot，全集）</td><td class="n">98.2</td><td class="sec">本站只用 3D 子集，14 题</td></tr></tbody></table></div>
+<p class="note">↑ 越大越好。厂商自报的出处见技术报告。</p>
+</div></section>
+</main>
+<footer><div class="wrap">
+<p>BAI AI Lab 多模态评测 mmBench · 数据截至 2026-10-31</p>
+<p>题目抽自 11 个公开评测集，题面与图片版权归原作者，本站只列题号、题型与得分。评测代码：<a href="https://github.com/BAI-AI-Lab/mmBench">BAI-AI-Lab/mmBench</a>；全部数据：<a href="data/mmbench.json">data/mmbench.json</a>。另见 <a href="https://bai-ai-lab.github.io/coding-eval/">代码能力评测</a>。</p>
+<p>由 <a href="https://alberthx86.github.io/" target="_blank" rel="noopener">Albert Huang</a> 创建于 2026-11-01</p>
+</div></footer>
+<script src="assets/app.js"></script>
+</body>
+</html>
